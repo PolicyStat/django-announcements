@@ -54,6 +54,11 @@ class Command(BaseCommand):
         except IndexError:
             raise CommandError('Please create a superuser account in order to make announcements.')
 
-        a = Announcement.objects.create(creator=admin, title=title, content=content)
+        a = Announcement.objects.create(
+            title=title,
+            content=content,
+            creator=admin,
+            site_wide=True,
+        )
         print 'Created announcement:'
         print str_announcement(a)
