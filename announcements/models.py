@@ -1,9 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 try:
@@ -20,13 +18,13 @@ class AnnouncementManager(models.Manager):
         """
         Fetches and returns a queryset with the current announcements. This
         method takes the following parameters:
-        
+
         ``exclude``
             A list of IDs that should be excluded from the queryset.
-        
+
         ``site_wide``
             A boolean flag to filter to just site wide announcements.
-        
+
         ``for_members``
             A boolean flag to allow member only announcements to be returned
             in addition to any others.
@@ -49,19 +47,26 @@ class Announcement(models.Model):
     title = models.CharField(_("title"), max_length=50)
     content = models.TextField(_("content"))
     creator = models.ForeignKey(User, verbose_name=_("creator"))
-    creation_date = models.DateTimeField(_("creation_date"), default=datetime.now)
-    site_wide = models.BooleanField(_("site wide"), default=False)
+    creation_date = models.DateTimeField(
+        _("creation_date"),
+        default=datetime.now,
+    )
+    site_wide = models.BooleanField(
+        _("site wide"),
+        default=False,
+        db_index=True,
+    )
     members_only = models.BooleanField(_("members only"), default=False)
-    
+
     objects = AnnouncementManager()
-    
+
     def get_absolute_url(self):
         return ("announcement_detail", [str(self.pk)])
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def __unicode__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = _("announcement")
         verbose_name_plural = _("announcements")
@@ -71,10 +76,10 @@ def current_announcements_for_request(request, **kwargs):
     """
     A helper function to get the current announcements based on some data from
     the HttpRequest.
-    
+
     If request.user is authenticated then allow the member only announcements
     to be returned.
-    
+
     Exclude announcements that have already been viewed by the user based on
     the ``excluded_announcements`` session variable.
     """
