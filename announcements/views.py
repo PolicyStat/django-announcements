@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import list_detail
 from django.shortcuts import get_object_or_404
 
@@ -33,4 +33,7 @@ def announcement_hide(request, object_id):
     excluded_announcements = request.session.get("excluded_announcements", set())
     excluded_announcements.add(announcement.pk)
     request.session["excluded_announcements"] = excluded_announcements
-    return HttpResponseRedirect(redirect_to)
+    if redirect_to:
+        return HttpResponseRedirect(redirect_to)
+    else:
+        return HttpResponse()
