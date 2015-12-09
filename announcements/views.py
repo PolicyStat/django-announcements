@@ -24,10 +24,7 @@ def announcement_list(request):
     announcements.
     """
     queryset = current_announcements_for_request(request)
-    return ListView(request, **{
-        "queryset": queryset,
-        "allow_empty": True,
-    })
+    return ListView(request, queryset=queryset, allow_empty=True)
 
 
 def announcement_hide(request, object_id):
