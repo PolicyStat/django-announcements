@@ -12,7 +12,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         (None, {
             "fields": ["title", "content", "site_wide", "members_only"],
         }),
-        
+
         ("Manage announcement", {
             "fields": ["send_now"],
         }),
@@ -25,4 +25,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         obj.save()
 
 
-admin.site.register(Announcement, AnnouncementAdmin)
+try:
+    admin.site.register(Announcement, AnnouncementAdmin)
+except admin.sites.AlreadyRegistered:
+    pass

@@ -1,8 +1,15 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import list_detail
 from django.shortcuts import get_object_or_404
 
-from announcements.models import Announcement, current_announcements_for_request
+try:
+    from django.views.generic.list_detail import object_list as ListView
+except ImportError:  # Django > 1.4
+    from django.views.generic.list import ListView
+
+from announcements.models import (
+    Announcement,
+    current_announcements_for_request,
+)
 
 try:
     set
@@ -17,10 +24,7 @@ def announcement_list(request):
     announcements.
     """
     queryset = current_announcements_for_request(request)
-    return list_detail.object_list(request, **{
-        "queryset": queryset,
-        "allow_empty": True,
-    })
+    return ListView(request, queryset=queryset, allow_empty=True)
 
 
 def announcement_hide(request, object_id):
@@ -30,7 +34,9 @@ def announcement_hide(request, object_id):
     announcement = get_object_or_404(Announcement, pk=object_id)
     # TODO: perform some basic security checks here to ensure next is not bad
     redirect_to = request.GET.get("next")
-    excluded_announcements = request.session.get("excluded_announcements", set())
+    excluded_announcements = request.session.get(
+        "excluded_announcements", set(),
+    )
     excluded_announcements.add(announcement.pk)
     request.session["excluded_announcements"] = excluded_announcements
     if redirect_to:
