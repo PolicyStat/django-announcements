@@ -1,10 +1,14 @@
+from __future__ import print_function
+
 from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from announcements.models import Announcement
 
+
 def str_announcement(a):
     return '%d: %s - %s' % (a.pk, a.title, a.content)
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -23,9 +27,9 @@ class Command(BaseCommand):
             announcements = Announcement.objects.all()
             if announcements:
                 for a in announcements:
-                    print str_announcement(a)
+                    print(str_announcement(a))
             else:
-                print 'No announcements exist.'
+                print('No announcements exist.')
             return
 
         # Delete an announcement.
@@ -37,22 +41,28 @@ class Command(BaseCommand):
                     a = Announcement.objects.get(**{field: delete})
                     s = str_announcement(a)
                     a.delete()
-                    print 'Deleted announcement:'
-                    print s
+                    print('Deleted announcement:')
+                    print(s)
                     return
                 except (ValueError, Announcement.DoesNotExist):
                     pass
-            raise CommandError('The announcement with title or PK "%s" does not exist.' % delete)
+            raise CommandError(
+                'The announcement with title or PK "%s" does not exist.' % delete,  # noqa
+            )
 
         # Create an announcement.
         try:
             title, content = args
         except ValueError:
-            raise CommandError('To create an announcement, you must specify the title and content.')
+            raise CommandError(
+                'To create an announcement, you must specify the title and content.',  # noqa
+            )
         try:
             admin = User.objects.filter(is_superuser=True)[0]
         except IndexError:
-            raise CommandError('Please create a superuser account in order to make announcements.')
+            raise CommandError(
+                'Please create a superuser account in order to make announcements.',  # noqa
+            )
 
         a = Announcement.objects.create(
             title=title,
@@ -60,5 +70,5 @@ class Command(BaseCommand):
             creator=admin,
             site_wide=True,
         )
-        print 'Created announcement:'
-        print str_announcement(a)
+        print('Created announcement:')
+        print(str_announcement(a))
