@@ -12,10 +12,6 @@ class AnnouncementAdmin(admin.ModelAdmin):
         (None, {
             "fields": ["title", "content", "site_wide", "members_only"],
         }),
-
-        ("Manage announcement", {
-            "fields": ["send_now"],
-        }),
     ]
 
     def save_model(self, request, obj, form, change):
