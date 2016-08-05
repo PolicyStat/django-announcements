@@ -1,7 +1,7 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 try:
@@ -46,7 +46,10 @@ class Announcement(models.Model):
     """
     title = models.CharField(_("title"), max_length=50)
     content = models.TextField(_("content"))
-    creator = models.ForeignKey(User, verbose_name=_("creator"))
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("creator"),
+    )
     creation_date = models.DateTimeField(
         _("creation_date"),
         default=datetime.now,
