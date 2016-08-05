@@ -2,7 +2,7 @@ from __future__ import print_function
 
 from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from announcements.models import Announcement
 
 
@@ -23,6 +23,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # List existing announcements.
+        User = get_user_model()
         if options.get('list'):
             announcements = Announcement.objects.all()
             if announcements:
