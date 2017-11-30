@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model
 from announcements.models import Announcement
@@ -11,15 +10,24 @@ def str_announcement(a):
 
 
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('-l', '--list', dest='list',
-                    action='store_true', default=False,
-                    help='List current announcements.'),
-        make_option('-d', '--delete', dest='delete',
-                    help='The title or pk of the announcement to delete.'),
-    )
     help = 'Create, delete, or list announcements.'
     args = '[title, content]'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-l'
+            '--list',
+            dest='list',
+            action='store_true',
+            default=False,
+            help='List current announcements.',
+        ),
+        parser.add_argument(
+            '-d',
+            '--delete',
+            dest='delete',
+            help='The title or pk of the announcement to delete.',
+        ),
 
     def handle(self, *args, **options):
         # List existing announcements.
