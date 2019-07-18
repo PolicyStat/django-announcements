@@ -74,6 +74,7 @@ class Announcement(models.Model):
     class Meta:
         verbose_name = _("announcement")
         verbose_name_plural = _("announcements")
+        app_label = 'announcements'
 
 
 def current_announcements_for_request(request, **kwargs):
