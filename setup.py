@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 
 setup(
@@ -10,9 +10,7 @@ setup(
     long_description = open("README").read(),
     license = "MIT",
     url = "http://code.google.com/p/django-announcements",
-    packages = [
-        "announcements",
-    ],
+    packages=find_packages(),
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
