@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 try:
@@ -65,8 +66,7 @@ class Announcement(models.Model):
     objects = AnnouncementManager()
 
     def get_absolute_url(self):
-        return ("announcement_detail", [str(self.pk)])
-    get_absolute_url = models.permalink(get_absolute_url)
+        return reverse("announcement_detail", args=[str(self.pk)])
 
     def __unicode__(self):
         return self.title
