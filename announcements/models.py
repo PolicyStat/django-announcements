@@ -49,6 +49,7 @@ class Announcement(models.Model):
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("creator"),
+        on_delete=models.CASCADE,
     )
     creation_date = models.DateTimeField(
         _("creation_date"),
