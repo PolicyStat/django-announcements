@@ -2,3 +2,4 @@
 .tox/
 MANIFEST
 test.db
+*.egg-info
