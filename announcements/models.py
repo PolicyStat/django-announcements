@@ -89,7 +89,7 @@ def current_announcements_for_request(request, **kwargs):
     the ``excluded_announcements`` session variable.
     """
     defaults = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         defaults["for_members"] = True
     defaults["exclude"] = request.session.get("excluded_announcements", set())
     defaults.update(kwargs)
